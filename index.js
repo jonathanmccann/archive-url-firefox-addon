@@ -1,9 +1,13 @@
-var self = require('sdk/self');
+var tabs = require("sdk/tabs");
 
-// a dummy function, to show how tests work.
-// to see how to test this function, look at test/test-index.js
-function dummy(text, callback) {
-  callback(text);
-}
-
-exports.dummy = dummy;
+var contextMenu = require("sdk/context-menu");
+	var menuItem = contextMenu.Item({
+		label: "Save to Wayback Machine",
+		context: contextMenu.PageContext(),
+		contentScript: 'self.on("click", function () {' +
+					   '	self.postMessage();' +
+					   '});',
+		onMessage: function () {
+			tabs.open("http://web.archive.org/save/" + tabs.activeTab.url);
+		}
+});
