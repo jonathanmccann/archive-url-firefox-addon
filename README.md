@@ -6,6 +6,8 @@ This Firefox addon will add a new item to the context menu and the toolbar menu,
 Installation
 ========
 
+This extension is available for installation via [Mozzila's Add-Ons](https://addons.mozilla.org/en-US/firefox/addon/save-url-to-wayback-machine).
+
 To build and install this extension from source, you will first need to install [Mozzila's Add-On SDK](https://developer.mozilla.org/en-US/Add-ons/SDK/Tools/jpm#Installation). Once that is installed, run the following command in the root directory (where the package.json is stored):
 
 ```
