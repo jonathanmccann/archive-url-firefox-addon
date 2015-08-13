@@ -5,9 +5,10 @@ var button = buttons.ActionButton({
 	id: "save-url-link",
 	label: "Save URL to Wayback Machine",
 	icon: {
-		"16": "./icon-save-16.png",
-		"32": "./icon-save-32.png",
-		"48": "./icon-save-64.png"
+		"16": "./archive-icon-16.png",
+		"32": "./archive-icon-32.png",
+		"64": "./archive-icon-64.png",
+		"128": "./archive-icon-128.png",
 	},
 	onClick: handleSaveURL
 });
