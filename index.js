@@ -86,7 +86,7 @@ function onDefaultArchiverPreferenceChange() {
 
 // Pass the current URL to the text box in the panel
 panel.on("show", function() {
-	panel.port.emit("show", tabs.activeTab.url);
+	panel.port.emit("show", defaultArchiver, tabs.activeTab.url);
 });
 
 // Handle button clicks from the panel
