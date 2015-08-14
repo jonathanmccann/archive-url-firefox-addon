@@ -7,6 +7,7 @@
         "title": "Default Archiver",
         "description": "Choose the default archiver to be shown in the context menu.",
         "type": "radio",
+        "value": "waybackMachine",
         "options": [{
           "value": "waybackMachine",
           "label": "Wayback Machine"
