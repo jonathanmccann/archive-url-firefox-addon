@@ -34,10 +34,10 @@ var menuItem = contextMenu.Item({
 				   '});',
 	onMessage: function () {
 		if (defaultArchiver == "archiveIs") {
-			handleSaveArchiveIs();
+			handleSaveArchiveIs(tabs.activeTab.url);
 		}
 		else {
-			handleSaveWaybackMachine();
+			handleSaveWaybackMachine(tabs.activeTab.url);
 		}
 	}
 });
@@ -48,7 +48,11 @@ var panel = panels.Panel({
 	contentScriptFile: self.data.url("panel.js"),
 	onHide: handleHide,
 	width: 250,
-	height: 60
+	height: 115
+});
+
+panel.on("show", function() {
+  panel.port.emit("show", tabs.activeTab.url);
 });
 
 function handleChange(state) {
@@ -68,14 +72,14 @@ function handleHide() {
 	button.state('window', {checked: false});
 }
 
-function handleSaveArchiveIs() {
+function handleSaveArchiveIs(url) {
 	panel.hide();
-	tabs.open("https://archive.is/?run=1&url=" + tabs.activeTab.url);
+	tabs.open("https://archive.is/?run=1&url=" + url);
 }
 
-function handleSaveWaybackMachine() {
+function handleSaveWaybackMachine(url) {
 	panel.hide();
-	tabs.open("https://web.archive.org/save/" + tabs.activeTab.url);
+	tabs.open("https://web.archive.org/save/" + url);
 }
 
 function onDefaultArchiverPreferenceChange() {
@@ -84,10 +88,10 @@ function onDefaultArchiverPreferenceChange() {
 	menuItem.label = defaultArchiverLabel;
 }
 
-panel.port.on("saveArchiveIs" , function() {
-	handleSaveArchiveIs(tabs.activeTab.url);
+panel.port.on("saveArchiveIs" , function(url) {
+	handleSaveArchiveIs(url);
 });
 
-panel.port.on("saveWaybackMachine" , function() {
-	handleSaveWaybackMachine(tabs.activeTab.url);
+panel.port.on("saveWaybackMachine" , function(url) {
+	handleSaveWaybackMachine(url);
 });
