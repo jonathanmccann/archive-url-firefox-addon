@@ -51,10 +51,6 @@ var panel = panels.Panel({
 	height: 115
 });
 
-panel.on("show", function() {
-  panel.port.emit("show", tabs.activeTab.url);
-});
-
 function handleChange(state) {
 	if (state.checked) {
 		panel.show({
@@ -73,21 +69,27 @@ function handleHide() {
 }
 
 function handleSaveArchiveIs(url) {
-	panel.hide();
 	tabs.open("https://archive.is/?run=1&url=" + url);
+	panel.hide();
 }
 
 function handleSaveWaybackMachine(url) {
-	panel.hide();
 	tabs.open("https://web.archive.org/save/" + url);
+	panel.hide();
 }
 
 function onDefaultArchiverPreferenceChange() {
 	defaultArchiver = preferences.defaultArchiver;
-	defaultArchiverLabel = (preferences.defaultArchiver == "archiveIs") ? archiveIsLabel : waybackMachineLabel;
+	defaultArchiverLabel = (defaultArchiver == "archiveIs") ? archiveIsLabel : waybackMachineLabel;
 	menuItem.label = defaultArchiverLabel;
 }
 
+// Pass the current URL to the text box in the panel
+panel.on("show", function() {
+	panel.port.emit("show", tabs.activeTab.url);
+});
+
+// Handle button clicks from the panel
 panel.port.on("saveArchiveIs" , function(url) {
 	handleSaveArchiveIs(url);
 });
