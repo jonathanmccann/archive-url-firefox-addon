@@ -2,7 +2,7 @@
   "title": "Save URL to Wayback Machine",
   "name": "save-url-to-wayback-machine-firefox-addon",
   "version": "0.0.3",
-  "description": "This Firefox addon will add a new item to the context menu and the toolbar menu, allowing you to save the current webpage to the Wayback Machine.",
+  "description": "This Firefox addon will add a new item to the context menu and the toolbar menu, allowing you to save the current webpage to the Wayback Machine. The toolbar button also allows you to save the webpage to archive.is.",
   "main": "index.js",
   "author": "Jonathan McCann",
   "engines": {
