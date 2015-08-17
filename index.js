@@ -6,6 +6,7 @@ var { ToggleButton } = require('sdk/ui/button/toggle');
 var panels = require("sdk/panel");
 var self = require("sdk/self");
 var tabs = require("sdk/tabs");
+var windowUtils = require('sdk/window/utils');
 
 require("sdk/simple-prefs").on("defaultArchiver", onDefaultArchiverPreferenceChange);
 
@@ -34,10 +35,10 @@ var menuItem = contextMenu.Item({
 				   '});',
 	onMessage: function () {
 		if (defaultArchiver == "archiveIs") {
-			handleSaveArchiveIs(tabs.activeTab.url);
+			handleSaveArchiveIs();
 		}
 		else {
-			handleSaveWaybackMachine(tabs.activeTab.url);
+			handleSaveWaybackMachine();
 		}
 	}
 });
@@ -47,8 +48,8 @@ var panel = panels.Panel({
 	contentURL: self.data.url("panel.html"),
 	contentScriptFile: self.data.url("panel.js"),
 	onHide: handleHide,
-	width: 250,
-	height: 115
+	width: 210,
+	height: 55
 });
 
 function handleChange(state) {
@@ -68,13 +69,19 @@ function handleHide() {
 	button.state('window', {checked: false});
 }
 
-function handleSaveArchiveIs(url) {
-	tabs.open("https://archive.is/?run=1&url=" + url);
+function handleSaveArchiveIs() {
+	var document = windowUtils.getMostRecentBrowserWindow().document;
+
+	tabs.open("https://archive.is/?run=1&url=" + document.getElementById("urlbar").value);
+
 	panel.hide();
 }
 
-function handleSaveWaybackMachine(url) {
-	tabs.open("https://web.archive.org/save/" + url);
+function handleSaveWaybackMachine() {
+	var document = windowUtils.getMostRecentBrowserWindow().document;
+
+	tabs.open("https://web.archive.org/save/" + document.getElementById("urlbar").value);
+
 	panel.hide();
 }
 
@@ -84,16 +91,11 @@ function onDefaultArchiverPreferenceChange() {
 	menuItem.label = defaultArchiverLabel;
 }
 
-// Pass the current URL to the text box in the panel
-panel.on("show", function() {
-	panel.port.emit("show", defaultArchiver, tabs.activeTab.url);
-});
-
 // Handle button clicks from the panel
-panel.port.on("saveArchiveIs" , function(url) {
-	handleSaveArchiveIs(url);
+panel.port.on("saveArchiveIs" , function() {
+	handleSaveArchiveIs();
 });
 
-panel.port.on("saveWaybackMachine" , function(url) {
-	handleSaveWaybackMachine(url);
+panel.port.on("saveWaybackMachine" , function() {
+	handleSaveWaybackMachine();
 });
