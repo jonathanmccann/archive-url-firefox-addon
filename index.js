@@ -46,7 +46,7 @@ var menuItem = contextMenu.Item({
 // Create panel to be used in the toggle button
 var panel = panels.Panel({
 	contentURL: self.data.url("panel.html"),
-	contentScriptFile: self.data.url("panel.js"),
+	contentScriptFile: [self.data.url("jquery-1.11.3.min.js"), self.data.url("panel.js")],
 	onHide: handleHide,
 	width: 210,
 	height: 55

@@ -10,3 +10,20 @@ saveWaybackMachineButton.addEventListener('click', function() {
 saveArchiveIsButton.addEventListener('click', function() {
 	self.port.emit("saveArchiveIs");
 });
+
+// Handle the 'hover' style in Javascript rather than CSS
+$('#saveWaybackMachine').mouseenter(function(e) {
+	$('#saveWaybackMachine').addClass('hover');
+}).mouseleave(function(e) {
+	$('#saveWaybackMachine').removeClass('hover');
+}).click(function(e) {
+	$('#saveWaybackMachine').removeClass('hover');
+});
+
+$('#saveArchiveIs').mouseenter(function(e) {
+	$('#saveArchiveIs').addClass('hover');
+}).mouseleave(function(e) {
+	$('#saveArchiveIs').removeClass('hover');
+}).click(function(e) {
+	$('#saveArchiveIs').removeClass('hover');
+});
