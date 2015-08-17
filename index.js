@@ -58,11 +58,6 @@ function handleChange(state) {
 			position: button
 		});
 	}
-	else {
-		panel.hide({
-			position: button
-		})
-	}
 }
 
 function handleHide() {
