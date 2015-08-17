@@ -15,8 +15,8 @@ var waybackMachineLabel = "Save to Wayback Machine";
 
 // Create toggle button for toolbar
 var button = ToggleButton({
-	id: "my-button",
-	label: "my button",
+	id: "save-url",
+	label: "Save URL",
 	icon: {
 		"16": "./archive-icon-16.png",
 		"32": "./archive-icon-32.png",
