@@ -1,7 +1,7 @@
 {
   "title": "Save URL to Wayback Machine",
   "name": "save-url-to-wayback-machine-firefox-addon",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "preferences": [{
         "name": "defaultArchiver",
         "title": "Default Archiver",
