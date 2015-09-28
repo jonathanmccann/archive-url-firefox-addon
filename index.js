@@ -14,17 +14,21 @@ require("sdk/simple-prefs").on("oneClickSave", onOneClickSavePreferenceChange);
 var archiveIsLabel = "Save to archive.is";
 var waybackMachineLabel = "Save to Wayback Machine";
 
+// Create string constants for the toolbar button label
+var saveUrlLabel = "Save URL";
+
 // Initialize preferences
 var defaultArchiver = preferences.defaultArchiver;
 var oneClickSave = preferences.oneClickSave;
 
-// Initialize context menu label
+// Initialize labels
 var contextMenuArchiverLabel = (defaultArchiver == "archiveIs") ? archiveIsLabel : waybackMachineLabel;
+var toolbarButtonLabel = oneClickSave ? contextMenuArchiverLabel : saveUrlLabel;
 
 // Create toggle button for toolbar
 var button = ToggleButton({
 	id: "save-url",
-	label: "Save URL",
+	label: toolbarButtonLabel,
 	icon: {
 		"16": "./archive-icon-16.png",
 		"32": "./archive-icon-32.png",
@@ -100,12 +104,17 @@ function onDefaultArchiverPreferenceChange() {
 	defaultArchiver = preferences.defaultArchiver;
 
 	contextMenuArchiverLabel = (defaultArchiver == "archiveIs") ? archiveIsLabel : waybackMachineLabel;
-
 	menuItem.label = contextMenuArchiverLabel;
+
+	toolbarButtonLabel = oneClickSave ? contextMenuArchiverLabel : saveUrlLabel;
+	button.label = toolbarButtonLabel
 }
 
 function onOneClickSavePreferenceChange() {
 	oneClickSave = preferences.oneClickSave;
+
+	toolbarButtonLabel = oneClickSave ? contextMenuArchiverLabel : saveUrlLabel;
+	button.label = toolbarButtonLabel
 }
 
 // Handle button clicks from the panel
