@@ -17,6 +17,13 @@
           "label": "archive.is"
         }
       ]
+    },
+    {
+        "name": "oneClickSave",
+        "title": "One Click Save",
+        "description": "Choose whether or not the toolbar button is a one click save to the default archiver or if you would like to choose which archiver to use upon clicking.",
+        "type": "bool",
+        "value": false
     }],
   "description": "This Firefox addon will add a new item to the context menu and the toolbar menu, allowing you to save the current webpage to the Wayback Machine. The toolbar button also allows you to save the webpage to archive.is.",
   "main": "index.js",

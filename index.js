@@ -8,6 +8,7 @@ var tabs = require("sdk/tabs");
 var windowUtils = require('sdk/window/utils');
 
 require("sdk/simple-prefs").on("defaultArchiver", onDefaultArchiverPreferenceChange);
+require("sdk/simple-prefs").on("oneClickSave", onOneClickSavePreferenceChange);
 
 // Create string constants for the context menu label
 var archiveIsLabel = "Save to archive.is";
@@ -15,6 +16,7 @@ var waybackMachineLabel = "Save to Wayback Machine";
 
 // Initialize preferences
 var defaultArchiver = preferences.defaultArchiver;
+var oneClickSave = preferences.oneClickSave;
 
 // Initialize context menu label
 var contextMenuArchiverLabel = (defaultArchiver == "archiveIs") ? archiveIsLabel : waybackMachineLabel;
@@ -39,12 +41,7 @@ var menuItem = contextMenu.Item({
 				   '	self.postMessage();' +
 				   '});',
 	onMessage: function () {
-		if (defaultArchiver == "archiveIs") {
-			handleSaveArchiveIs();
-		}
-		else {
-			handleSaveWaybackMachine();
-		}
+		handleSave();
 	}
 });
 
@@ -58,7 +55,12 @@ var panel = panels.Panel({
 });
 
 function handleChange(state) {
-	if (state.checked) {
+	if (oneClickSave) {
+		handleSave();
+
+		button.state('window', {checked: false});
+	}
+	else if (state.checked) {
 		panel.show({
 			position: button
 		});
@@ -67,6 +69,15 @@ function handleChange(state) {
 
 function handleHide() {
 	button.state('window', {checked: false});
+}
+
+function handleSave() {
+	if (defaultArchiver == "archiveIs") {
+		handleSaveArchiveIs();
+	}
+	else {
+		handleSaveWaybackMachine();
+	}
 }
 
 function handleSaveArchiveIs() {
@@ -91,6 +102,10 @@ function onDefaultArchiverPreferenceChange() {
 	contextMenuArchiverLabel = (defaultArchiver == "archiveIs") ? archiveIsLabel : waybackMachineLabel;
 
 	menuItem.label = contextMenuArchiverLabel;
+}
+
+function onOneClickSavePreferenceChange() {
+	oneClickSave = preferences.oneClickSave;
 }
 
 // Handle button clicks from the panel
