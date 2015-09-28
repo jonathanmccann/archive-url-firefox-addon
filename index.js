@@ -1,6 +1,5 @@
 // Set up necessary variables via "require"
 var contextMenu = require("sdk/context-menu");
-var defaultArchiver = require('sdk/simple-prefs').prefs['defaultArchiver'];
 var preferences = require("sdk/simple-prefs").prefs;
 var { ToggleButton } = require('sdk/ui/button/toggle');
 var panels = require("sdk/panel");
@@ -13,6 +12,12 @@ require("sdk/simple-prefs").on("defaultArchiver", onDefaultArchiverPreferenceCha
 // Create string constants for the context menu label
 var archiveIsLabel = "Save to archive.is";
 var waybackMachineLabel = "Save to Wayback Machine";
+
+// Initialize preferences
+var defaultArchiver = preferences.defaultArchiver;
+
+// Initialize context menu label
+var contextMenuArchiverLabel = (defaultArchiver == "archiveIs") ? archiveIsLabel : waybackMachineLabel;
 
 // Create toggle button for toolbar
 var button = ToggleButton({
@@ -28,7 +33,7 @@ var button = ToggleButton({
 
 // Create context menu item
 var menuItem = contextMenu.Item({
-	label: waybackMachineLabel,
+	label: contextMenuArchiverLabel,
 	context: contextMenu.PageContext(),
 	contentScript: 'self.on("click", function () {' +
 				   '	self.postMessage();' +
@@ -82,8 +87,10 @@ function handleSaveWaybackMachine() {
 
 function onDefaultArchiverPreferenceChange() {
 	defaultArchiver = preferences.defaultArchiver;
-	defaultArchiverLabel = (defaultArchiver == "archiveIs") ? archiveIsLabel : waybackMachineLabel;
-	menuItem.label = defaultArchiverLabel;
+
+	contextMenuArchiverLabel = (defaultArchiver == "archiveIs") ? archiveIsLabel : waybackMachineLabel;
+
+	menuItem.label = contextMenuArchiverLabel;
 }
 
 // Handle button clicks from the panel
