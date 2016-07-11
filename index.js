@@ -87,7 +87,9 @@ function handleSave() {
 function handleSaveArchiveIs() {
 	var document = windowUtils.getMostRecentBrowserWindow().document;
 
-	tabs.open("https://archive.is/?run=1&url=" + document.getElementById("urlbar").value);
+	var url = document.getElementById("urlbar").value;
+
+	tabs.open("https://archive.is/?run=1&url=" + encodeURIComponent(url));
 
 	panel.hide();
 }
