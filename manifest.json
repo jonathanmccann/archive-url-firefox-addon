@@ -1,0 +1,36 @@
+{
+	"manifest_version": 2,
+	"name": "Archive URL",
+	"version": "1.0",
+
+	"description": "This Firefox addon will add a new item to the context menu and a button the toolbar menu, allowing you to archive the current webpage to the Wayback Machine or archive.is. When right clicking on a link or an image, you can choose to archive that URL instead of the current URL.",
+
+	"icons": {
+		"16": "icons/archive-icon-16.png",
+		"32": "icons/archive-icon-32.png",
+		"64": "icons/archive-icon-64.png",
+		"128": "icons/archive-icon-128.png"
+	},
+
+	"options_ui": {
+		"page": "options/options.html"
+	},
+
+	"permissions": [
+		"contextMenus",
+    "storage",
+		"tabs"
+	],
+
+	"browser_action": {
+		"default_icon": {
+			"16": "icons/archive-icon-16.png",
+			"32": "icons/archive-icon-32.png"
+		},
+		"default_title": "Archive to Wayback Machine"
+	},
+
+	"background": {
+		"scripts": ["archive.js"]
+	}
+}
