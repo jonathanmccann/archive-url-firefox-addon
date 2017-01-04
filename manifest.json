@@ -3,6 +3,9 @@
 	"name": "Archive URL",
 	"version": "1.0",
 
+	"author": "Jonathan McCann",
+	"homepage_url": "https://github.com/jonathanmccann/archive-url-firefox-addon",
+
 	"description": "This Firefox addon will add a new item to the context menu and a button the toolbar menu, allowing you to archive the current webpage to the Wayback Machine or archive.is. When right clicking on a link or an image, you can choose to archive that URL instead of the current URL.",
 
 	"icons": {
