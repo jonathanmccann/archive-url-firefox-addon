@@ -1,3 +1,5 @@
+var oneClickSave = document.getElementById("oneClickSave");
+
 function saveOptions(e) {
 	var archiver;
 
@@ -21,7 +23,7 @@ function saveOptions(e) {
 	e.preventDefault();
 }
 
-function onGetArchiver(archiver) {
+function setArchiver(archiver) {
 	if ((archiver.archiver == "") || (archiver.archiver == "wayback")) {
 		document.getElementById("wayback").checked = true;
 	}
@@ -30,8 +32,8 @@ function onGetArchiver(archiver) {
 	}
 }
 
-function onGetOneClickSave(oneClickSave) {
-	if ((oneClickSave.oneClickSave == undefined) || (oneClickSave.oneClickSave == false)) {
+function setOneClickSave(oneClickSave) {
+	if ((oneClickSave == undefined) || (oneClickSave == false)) {
 		document.getElementById("oneClickSave").checked = false;
 	}
 	else {
@@ -39,19 +41,29 @@ function onGetOneClickSave(oneClickSave) {
 	}
 }
 
-function onError(error) {
-	console.log("Error: ${error}");
+function toggleArchiverOptions() {
+	var length = document.options.archiver.length
+
+	for (var i = 0; i < length; i++) {
+		document.options.archiver[i].disabled = !oneClickSave.checked;
+	}
 }
 
 function restoreOptions() {
-	var archiver = browser.storage.local.get("archiver");
+	browser.storage.local.get("archiver", function(archiver) {
+		setArchiver(archiver);
 
-	archiver.then(onGetArchiver, onError);
+		browser.storage.local.get("oneClickSave", function(name) {
+			setOneClickSave(name.oneClickSave);
 
-	var oneClickSave = browser.storage.local.get("oneClickSave");
-
-	oneClickSave.then(onGetOneClickSave, onError);
+			toggleArchiverOptions();
+		});
+	});
 }
 
 document.addEventListener("DOMContentLoaded", restoreOptions);
 document.querySelector("form").addEventListener("submit", saveOptions);
+
+oneClickSave.addEventListener('change', function (event) {
+	toggleArchiverOptions();
+});
