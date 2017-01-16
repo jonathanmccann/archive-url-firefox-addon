@@ -15,15 +15,30 @@ function saveOptions(e) {
 		archiver: archiver
 	});
 
+	var oneClickSave = document.options.oneClickSave.checked;
+
+	browser.storage.local.set({
+		oneClickSave: oneClickSave
+	});
+
 	e.preventDefault();
 }
 
-function onGot(archiver) {
+function onGetArchiver(archiver) {
 	if ((archiver.archiver == "") || (archiver.archiver == "wayback")) {
 		document.getElementById("wayback").checked = true;
 	}
 	else {
 		document.getElementById("archive").checked = true;
+	}
+}
+
+function onGetOneClickSave(oneClickSave) {
+	if ((oneClickSave.oneClickSave == undefined) || (oneClickSave.oneClickSave == false)) {
+		document.getElementById("oneClickSave").checked = false;
+	}
+	else {
+		document.getElementById("oneClickSave").checked = true;
 	}
 }
 
@@ -34,7 +49,11 @@ function onError(error) {
 function restoreOptions() {
 	var archiver = browser.storage.local.get("archiver");
 
-	archiver.then(onGot, onError);
+	archiver.then(onGetArchiver, onError);
+
+	var oneClickSave = browser.storage.local.get("oneClickSave");
+
+	oneClickSave.then(onGetOneClickSave, onError);
 }
 
 document.addEventListener("DOMContentLoaded", restoreOptions);

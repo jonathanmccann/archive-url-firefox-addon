@@ -1,4 +1,5 @@
 var archiver;
+var oneClickSave;
 
 var archiveCurrentUrlTitle = "Archive Current URL";
 var archiveImageUrlTitle = "Archive Image URL";
@@ -40,15 +41,22 @@ function checkForArchiverChanges(changes, area) {
 
 				updateArchiver();
 			}
+			else if (item == "oneClickSave") {
+				oneClickSave = changes[item].newValue;
+
+				updateArchiver();
+			}
 		}
 	}
 }
 
 function updateArchiver() {
-	console.log("Archiver = " + archiver);
+	if (oneClickSave == "false") {
+		browser.browserAction.setPopup({popup: "popup/popup.html"});
 
-	if (archiver == "archive") {
-		browser.browserAction.setTitle({title: "Archive to archive.is"});
+		browser.browserAction.onClicked.removeListener(saveCurrentUrl);
+
+		browser.browserAction.setTitle({title: "Archive current URL"});
 
 		browser.contextMenus.removeAll();
 
@@ -69,11 +77,6 @@ function updateArchiver() {
 			title: archiveLinkUrlTitle,
 			contexts: ["link"]
 		})
-	}
-	else {
-		browser.browserAction.setTitle({title: "Archive to Wayback Machine"});
-
-		browser.contextMenus.removeAll();
 
 		browser.contextMenus.create({
 			id: "archive-url-wayback",
@@ -92,6 +95,58 @@ function updateArchiver() {
 			title: archiveLinkUrlTitle,
 			contexts: ["link"]
 		})
+	}
+	else {
+		browser.browserAction.setPopup({popup: ""});
+
+		browser.browserAction.onClicked.addListener(saveCurrentUrl);
+
+		if (archiver == "archive") {
+			browser.browserAction.setTitle({title: "Archive to archive.is"});
+
+			browser.contextMenus.removeAll();
+
+			browser.contextMenus.create({
+				id: "archive-url-archive",
+				title: archiveCurrentUrlTitle,
+				contexts: ["page"]
+			})
+
+			browser.contextMenus.create({
+				id: "archive-image-url-archive",
+				title: archiveImageUrlTitle,
+				contexts: ["image"]
+			})
+
+			browser.contextMenus.create({
+				id: "archive-link-url-archive",
+				title: archiveLinkUrlTitle,
+				contexts: ["link"]
+			})
+		}
+		else {
+			browser.browserAction.setTitle({title: "Archive to Wayback Machine"});
+
+			browser.contextMenus.removeAll();
+
+			browser.contextMenus.create({
+				id: "archive-url-wayback",
+				title: archiveCurrentUrlTitle,
+				contexts: ["page"]
+			})
+
+			browser.contextMenus.create({
+				id: "archive-image-url-wayback",
+				title: archiveImageUrlTitle,
+				contexts: ["image"]
+			})
+
+			browser.contextMenus.create({
+				id: "archive-link-url-wayback",
+				title: archiveLinkUrlTitle,
+				contexts: ["link"]
+			})
+		}
 	}
 }
 
@@ -124,7 +179,7 @@ browser.browserAction.onClicked.addListener(saveCurrentUrl);
 // Add listener for changes to local storage to update the archiver
 browser.storage.onChanged.addListener(checkForArchiverChanges);
 
-// Read the archiver name from local storage
+// Read the preferences from local storage
 browser.storage.local.get("archiver", function(name) {
 	if (name.archiver == "undefined") {
 		archiver = wayback;
@@ -133,5 +188,14 @@ browser.storage.local.get("archiver", function(name) {
 		archiver = name.archiver;
 	}
 
-	updateArchiver();
+	browser.storage.local.get("oneClickSave", function(name) {
+		if ((name.oneClickSave == undefined) || (name.oneClickSave == false)) {
+			oneClickSave = "false";
+		}
+		else {
+			oneClickSave = "true";
+		}
+
+		updateArchiver();
+	});
 });
