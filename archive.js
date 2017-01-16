@@ -2,8 +2,16 @@ var archiver;
 var oneClickSave;
 
 var archiveCurrentUrlTitle = "Archive Current URL";
+var archiveCurrentUrlTitleToArchive = "Archive Current URL to archive.is";
+var archiveCurrentUrlTitleToWayback = "Archive Current URL to Wayback Machine";
+
 var archiveImageUrlTitle = "Archive Image URL";
+var archiveImageUrlTitleToArchive = "Archive Image URL to archive.is";
+var archiveImageUrlTitleToWayback = "Archive Image URL to Wayback Machine";
+
 var archiveLinkUrlTitle = "Archive Link URL"
+var archiveLinkUrlTitleToArchive = "Archive Link URL to archive.is"
+var archiveLinkUrlTitleToWayback = "Archive Link URL to Wayback Machine"
 
 function saveCurrentUrl() {
 	browser.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -68,37 +76,37 @@ function updateArchiver() {
 
 		browser.contextMenus.create({
 			id: "archive-url-archive",
-			title: archiveCurrentUrlTitle,
+			title: archiveCurrentUrlTitleToArchive,
+			contexts: ["page"]
+		})
+
+		browser.contextMenus.create({
+			id: "archive-url-wayback",
+			title: archiveCurrentUrlTitleToWayback,
 			contexts: ["page"]
 		})
 
 		browser.contextMenus.create({
 			id: "archive-image-url-archive",
-			title: archiveImageUrlTitle,
+			title: archiveImageUrlTitleToArchive,
+			contexts: ["image"]
+		})
+
+		browser.contextMenus.create({
+			id: "archive-image-url-wayback",
+			title: archiveImageUrlTitleToWayback,
 			contexts: ["image"]
 		})
 
 		browser.contextMenus.create({
 			id: "archive-link-url-archive",
-			title: archiveLinkUrlTitle,
+			title: archiveLinkUrlTitleToArchive,
 			contexts: ["link"]
 		})
 
 		browser.contextMenus.create({
-			id: "archive-url-wayback",
-			title: archiveCurrentUrlTitle,
-			contexts: ["page"]
-		})
-
-		browser.contextMenus.create({
-			id: "archive-image-url-wayback",
-			title: archiveImageUrlTitle,
-			contexts: ["image"]
-		})
-
-		browser.contextMenus.create({
 			id: "archive-link-url-wayback",
-			title: archiveLinkUrlTitle,
+			title: archiveLinkUrlTitleToWayback,
 			contexts: ["link"]
 		})
 	}
