@@ -33,25 +33,31 @@ function archiveUrlWayback(url) {
 // Check for changes to 'archiver' and update the local value accordingly as well as the toolbar title
 function checkForArchiverChanges(changes, area) {
 	if (area == "local") {
+		var preferenceChange = false;
+
 		var changedItems = Object.keys(changes);
 
 		for (item of changedItems) {
 			if (item == "archiver") {
 				archiver = changes[item].newValue;
 
-				updateArchiver();
+				preferenceChange = true;
 			}
 			else if (item == "oneClickSave") {
 				oneClickSave = changes[item].newValue;
 
-				updateArchiver();
+				preferenceChange = true;
 			}
+		}
+
+		if (preferenceChange) {
+			updateArchiver();
 		}
 	}
 }
 
 function updateArchiver() {
-	if (oneClickSave == "false") {
+	if ((oneClickSave == "false") || (oneClickSave == false)) {
 		browser.browserAction.setPopup({popup: "popup/popup.html"});
 
 		browser.browserAction.onClicked.removeListener(saveCurrentUrl);
@@ -172,9 +178,6 @@ browser.contextMenus.onClicked.addListener(function(info, tab) {
 			break;
 	}
 });
-
-// Add listener for toolbar button
-browser.browserAction.onClicked.addListener(saveCurrentUrl);
 
 // Add listener for changes to local storage to update the archiver
 browser.storage.onChanged.addListener(checkForArchiverChanges);

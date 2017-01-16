@@ -11,13 +11,10 @@ function saveOptions(e) {
 		}
 	}
 
-	browser.storage.local.set({
-		archiver: archiver
-	});
-
 	var oneClickSave = document.options.oneClickSave.checked;
 
 	browser.storage.local.set({
+		archiver: archiver,
 		oneClickSave: oneClickSave
 	});
 
