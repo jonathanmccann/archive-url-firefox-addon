@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Archive URL",
-	"version": "1.0",
+	"version": "1.2",
 
 	"author": "Jonathan McCann",
 	"homepage_url": "https://github.com/jonathanmccann/archive-url-firefox-addon",
@@ -26,6 +26,7 @@
 	],
 
 	"browser_action": {
+		"browser_style": false,
 		"default_icon": {
 			"16": "icons/archive-icon-16.png",
 			"32": "icons/archive-icon-32.png"
