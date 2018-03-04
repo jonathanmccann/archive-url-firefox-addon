@@ -10,6 +10,19 @@ document.addEventListener("click", function(e) {
 					url: "https://archive.is/?run=1&url=" + tabs[0].url
 				})
 			}
+
+			if (e.target.id == "both") {
+				browser.tabs.create({
+					url: "https://archive.is/?run=1&url=" + tabs[0].url,
+					active: false
+				})
+				
+				browser.tabs.create({
+					url: "https://web.archive.org/save/" + tabs[0].url,
+					active: false
+				})
+			}
+			
 			else {
 				browser.tabs.create({
 					url: "https://web.archive.org/save/" + tabs[0].url
