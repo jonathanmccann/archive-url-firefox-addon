@@ -1,20 +1,20 @@
-var archiver,
-	oneClickSave;
+var archiver;
+var oneClickSave;
 
-var archiveCurrentUrlTitle = "Archive Current URL",
-	archiveCurrentUrlTitleToArchive = "Archive Current URL to archive.is",
-	archiveCurrentUrlTitleToWayback = "Archive Current URL to Wayback Machine",
-	archiveCurrentUrlTitleToBoth = "Archive Current URL to both of them";
+var archiveCurrentUrlTitle = "Archive Current URL";
+var archiveCurrentUrlTitleToArchive = "Archive Current URL to archive.is";
+var archiveCurrentUrlTitleToWayback = "Archive Current URL to Wayback Machine";
+var archiveCurrentUrlTitleToBoth = "Archive Current URL to both";
 
-var archiveImageUrlTitle = "Archive Image URL",
-	archiveImageUrlTitleToArchive = "Archive Image URL to archive.is",
-	archiveImageUrlTitleToWayback = "Archive Image URL to Wayback Machine",
-	archiveImageUrlTitleToBoth = "Archive Image URL to both of them";
+var archiveImageUrlTitle = "Archive Image URL";
+var archiveImageUrlTitleToArchive = "Archive Image URL to archive.is";
+var archiveImageUrlTitleToWayback = "Archive Image URL to Wayback Machine";
+var archiveImageUrlTitleToBoth = "Archive Image URL to bothm";
 
-var archiveLinkUrlTitle = "Archive Link URL",
-	archiveLinkUrlTitleToArchive = "Archive Link URL to archive.is",
-	archiveLinkUrlTitleToWayback = "Archive Link URL to Wayback Machine",
-	archiveLinkUrlTitleToBoth = "Archive Link URL to both of them";
+var archiveLinkUrlTitle = "Archive Link URL";
+var archiveLinkUrlTitleToArchive = "Archive Link URL to archive.is";
+var archiveLinkUrlTitleToWayback = "Archive Link URL to Wayback Machine";
+var archiveLinkUrlTitleToBoth = "Archive Link URL to both";
 
 function saveCurrentUrl() {
 	browser.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -31,26 +31,21 @@ function saveCurrentUrl() {
 
 function archiveUrlArchive(url) {
 	browser.tabs.create({
-		url: "https://archive.is/?run=1&url=" + url
+		url: "https://archive.is/?run=1&url=" + url,
+		active: false
 	})
 }
 
 function archiveUrlWayback(url) {
 	browser.tabs.create({
-		url: "https://web.archive.org/save/" + url
+		url: "https://web.archive.org/save/" + url,
+		active: false
 	})
 }
 
 function archiveUrlToBoth(url) {
-	browser.tabs.create({
-		url: "https://archive.is/?run=1&url=" + url,
-		active: false
-	})
-	
-	browser.tabs.create({
-		url: "https://web.archive.org/save/" + url,
-		active: false
-	})
+	archiveUrlArchive(url);
+	archiveUrlWayback(url);
 }
 
 // Check for changes to 'archiver' and update the local value accordingly as well as the toolbar title
@@ -208,23 +203,20 @@ browser.contextMenus.onClicked.addListener(function(info, tab) {
 		case "archive-link-url-archive":
 			archiveUrlArchive(info.linkUrl);
 			break;
-		case "archive-link-url-both":
-			archiveUrlToBoth(info.linkUrl);
-			break;
 		case "archive-url-wayback":
 			archiveUrlWayback(tab.url);
-			break;
-		case "archive-url-both":
-			archiveUrlToBoth(tab.url);
 			break;
 		case "archive-image-url-wayback":
 			archiveUrlWayback(info.srcUrl);
 			break;
-		case "archive-image-url-both":
-			archiveUrlToBoth(info.srcUrl);
-			break;
 		case "archive-link-url-wayback":
 			archiveUrlWayback(info.linkUrl);
+			break;
+		case "archive-url-both":
+			archiveUrlToBoth(tab.url);
+			break;
+		case "archive-image-url-both":
+			archiveUrlToBoth(info.srcUrl);
 			break;
 		case "archive-link-url-both":
 			archiveUrlToBoth(info.linkUrl);
