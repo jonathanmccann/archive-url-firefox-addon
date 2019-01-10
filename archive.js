@@ -2,17 +2,17 @@ var archiver;
 var oneClickSave;
 
 var archiveCurrentUrlTitle = "Archive Current URL";
-var archiveCurrentUrlTitleToArchive = "Archive Current URL to archive.is";
+var archiveCurrentUrlTitleToArchive = "Archive Current URL to archive.today";
 var archiveCurrentUrlTitleToWayback = "Archive Current URL to Wayback Machine";
 var archiveCurrentUrlTitleToBoth = "Archive Current URL to both";
 
 var archiveImageUrlTitle = "Archive Image URL";
-var archiveImageUrlTitleToArchive = "Archive Image URL to archive.is";
+var archiveImageUrlTitleToArchive = "Archive Image URL to archive.today";
 var archiveImageUrlTitleToWayback = "Archive Image URL to Wayback Machine";
 var archiveImageUrlTitleToBoth = "Archive Image URL to bothm";
 
 var archiveLinkUrlTitle = "Archive Link URL";
-var archiveLinkUrlTitleToArchive = "Archive Link URL to archive.is";
+var archiveLinkUrlTitleToArchive = "Archive Link URL to archive.today";
 var archiveLinkUrlTitleToWayback = "Archive Link URL to Wayback Machine";
 var archiveLinkUrlTitleToBoth = "Archive Link URL to both";
 
@@ -31,7 +31,7 @@ function saveCurrentUrl() {
 
 function archiveUrlArchive(url) {
 	browser.tabs.create({
-		url: "https://archive.is/?run=1&url=" + url,
+		url: "https://archive.today/?run=1&url=" + url,
 		active: false
 	})
 }
@@ -144,7 +144,7 @@ function updateArchiver() {
 		browser.browserAction.onClicked.addListener(saveCurrentUrl);
 
 		if (archiver == "archive") {
-			browser.browserAction.setTitle({title: "Archive to archive.is"});
+			browser.browserAction.setTitle({title: "Archive to archive.today"});
 
 			browser.contextMenus.removeAll();
 
