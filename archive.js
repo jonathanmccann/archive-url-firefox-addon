@@ -1,18 +1,19 @@
+var archiveDomain;
 var archiver;
 var oneClickSave;
 
 var archiveCurrentUrlTitle = "Archive Current URL";
-var archiveCurrentUrlTitleToArchive = "Archive Current URL to archive.today";
+var archiveCurrentUrlTitleToArchive = "Archive Current URL to archive.";
 var archiveCurrentUrlTitleToWayback = "Archive Current URL to Wayback Machine";
 var archiveCurrentUrlTitleToBoth = "Archive Current URL to both";
 
 var archiveImageUrlTitle = "Archive Image URL";
-var archiveImageUrlTitleToArchive = "Archive Image URL to archive.today";
+var archiveImageUrlTitleToArchive = "Archive Image URL to archive.";
 var archiveImageUrlTitleToWayback = "Archive Image URL to Wayback Machine";
 var archiveImageUrlTitleToBoth = "Archive Image URL to bothm";
 
 var archiveLinkUrlTitle = "Archive Link URL";
-var archiveLinkUrlTitleToArchive = "Archive Link URL to archive.today";
+var archiveLinkUrlTitleToArchive = "Archive Link URL to archive.";
 var archiveLinkUrlTitleToWayback = "Archive Link URL to Wayback Machine";
 var archiveLinkUrlTitleToBoth = "Archive Link URL to both";
 
@@ -31,7 +32,7 @@ function saveCurrentUrl() {
 
 function archiveUrlArchive(url) {
 	browser.tabs.create({
-		url: "https://archive.today/?run=1&url=" + url,
+		url: "https://archive." + archiveDomain + "/?run=1&url=" + url,
 		active: false
 	})
 }
@@ -56,7 +57,12 @@ function checkForArchiverChanges(changes, area) {
 		var changedItems = Object.keys(changes);
 
 		for (item of changedItems) {
-			if (item == "archiver") {
+			if (item == "archiveDomain") {
+				archiveDomain = changes[item].newValue;
+
+				preferenceChange = true;
+			}
+			else if (item == "archiver") {
 				archiver = changes[item].newValue;
 
 				preferenceChange = true;
@@ -86,7 +92,7 @@ function updateArchiver() {
 
 		browser.contextMenus.create({
 			id: "archive-url-archive",
-			title: archiveCurrentUrlTitleToArchive,
+			title: archiveCurrentUrlTitleToArchive + archiveDomain,
 			contexts: ["page"]
 		})
 
@@ -104,7 +110,7 @@ function updateArchiver() {
 
 		browser.contextMenus.create({
 			id: "archive-image-url-archive",
-			title: archiveImageUrlTitleToArchive,
+			title: archiveImageUrlTitleToArchive + archiveDomain,
 			contexts: ["image"]
 		})
 
@@ -122,7 +128,7 @@ function updateArchiver() {
 
 		browser.contextMenus.create({
 			id: "archive-link-url-archive",
-			title: archiveLinkUrlTitleToArchive,
+			title: archiveLinkUrlTitleToArchive + archiveDomain,
 			contexts: ["link"]
 		})
 
@@ -144,7 +150,7 @@ function updateArchiver() {
 		browser.browserAction.onClicked.addListener(saveCurrentUrl);
 
 		if (archiver == "archive") {
-			browser.browserAction.setTitle({title: "Archive to archive.today"});
+			browser.browserAction.setTitle({title: "Archive to archive." + archiveDomain});
 
 			browser.contextMenus.removeAll();
 
@@ -228,22 +234,31 @@ browser.contextMenus.onClicked.addListener(function(info, tab) {
 browser.storage.onChanged.addListener(checkForArchiverChanges);
 
 // Read the preferences from local storage
-browser.storage.local.get("archiver", function(name) {
-	if (name.archiver == "undefined") {
-		archiver = wayback;
+browser.storage.local.get("archiverDomain", function(name) {
+	if ((name.archiveDomain == undefined)) {
+		archiveDomain = "today";
 	}
 	else {
-		archiver = name.archiver;
+		archiveDomain = name.archiveDomain;
 	}
 
-	browser.storage.local.get("oneClickSave", function(name) {
-		if ((name.oneClickSave == undefined) || (name.oneClickSave == false)) {
-			oneClickSave = "false";
+	browser.storage.local.get("archiver", function(name) {
+		if (name.archiver == "undefined") {
+			archiver = wayback;
 		}
 		else {
-			oneClickSave = "true";
+			archiver = name.archiver;
 		}
 
-		updateArchiver();
+		browser.storage.local.get("oneClickSave", function(name) {
+			if ((name.oneClickSave == undefined) || (name.oneClickSave == false)) {
+				oneClickSave = "false";
+			}
+			else {
+				oneClickSave = "true";
+			}
+
+			updateArchiver();
+		});
 	});
 });

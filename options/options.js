@@ -3,7 +3,17 @@ var oneClickSave = document.getElementById("oneClickSave");
 function saveOptions(e) {
 	var archiver;
 
-	var length = document.options.archiver.length
+	var archiveDomain = document.options.archiveDomain.value;
+
+	if ((archiveDomain == undefined) || (archiveDomain == "")) {
+		archiveDomain = "today";
+
+		document.getElementById("archiveDomain").value = "today";
+	}
+
+	document.getElementById("archiverLabel").innerHTML = "archive." + archiveDomain;
+
+	var length = document.options.archiver.length;
 
 	for (var i = 0; i < length; i++) {
 		if (document.options.archiver[i].checked) {
@@ -16,11 +26,23 @@ function saveOptions(e) {
 	var oneClickSave = document.options.oneClickSave.checked;
 
 	browser.storage.local.set({
+		archiveDomain: archiveDomain,
 		archiver: archiver,
 		oneClickSave: oneClickSave
 	});
 
 	e.preventDefault();
+}
+
+function setArchiveDomain(archiveDomain) {
+	if ((archiveDomain.archiveDomain == undefined) || (archiveDomain.archiveDomain == "")) {
+		document.getElementById("archiveDomain").value = "today";
+		document.getElementById("archiverLabel").innerHTML = "archive.today";
+	}
+	else {
+		document.getElementById("archiveDomain").value = archiveDomain.archiveDomain;
+		document.getElementById("archiverLabel").innerHTML = "archive." + archiveDomain.archiveDomain;
+	}
 }
 
 function setArchiver(archiver) {
@@ -50,6 +72,10 @@ function toggleArchiverOptions() {
 }
 
 function restoreOptions() {
+	browser.storage.local.get("archiveDomain", function(archiveDomain) {
+		setArchiveDomain(archiveDomain);
+	});
+
 	browser.storage.local.get("archiver", function(archiver) {
 		setArchiver(archiver);
 
