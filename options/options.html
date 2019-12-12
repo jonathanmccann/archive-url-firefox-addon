@@ -9,11 +9,18 @@
 		<form name="options">
 			<fieldset>
 				<legend>Archiver</legend>
-				<label><input type="checkbox" name="oneClickSave" id="oneClickSave">One Click Save</label><br>
-				<label><input type="radio" name="archiver" id="wayback" value="wayback">Wayback Machine</label><br>
+
+				<input type="checkbox" name="oneClickSave" id="oneClickSave">
+				<label for="oneClickSave">One Click Save</label><br>
+
+				<input type="radio" name="archiver" id="wayback" value="wayback">
+				<label for="wayback">Wayback Machine</label><br>
+
 				<input type="radio" name="archiver" id="archive" value="archive">
-				<label id="archiverLabel">Archive</label><br><br>
-				<label>Set domain for Archive: <input type="text" name="archiveDomain" id="archiveDomain" value="today"></label><br><br>
+				<label for="archive"id="archiverLabel">Archive</label><br><br>
+
+				<label>Set domain for Archive:</label>
+				<input type="text" name="archiveDomain" id="archiveDomain" value="today"><br><br>
 
 				<button type="submit">Save</button>
 			</fieldset>
