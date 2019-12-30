@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Archive URL",
-	"version": "1.6",
+	"version": "1.7",
 
 	"author": "Jonathan McCann",
 	"homepage_url": "https://github.com/jonathanmccann/archive-url-firefox-addon",
@@ -9,10 +9,10 @@
 	"description": "This Firefox addon will add a new item to the context menu and a button the toolbar menu, allowing you to archive the current webpage to the Wayback Machine or archive.today. When right clicking on a link or an image, you can choose to archive that URL instead of the current URL.",
 
 	"icons": {
-		"16": "icons/archive-icon-16.png",
-		"32": "icons/archive-icon-32.png",
-		"64": "icons/archive-icon-64.png",
-		"128": "icons/archive-icon-128.png"
+		"16": "icons/archive-icon-dark-16.png",
+		"32": "icons/archive-icon-dark-32.png",
+		"64": "icons/archive-icon-dark-64.png",
+		"128": "icons/archive-icon-dark-128.png"
 	},
 
 	"options_ui": {
@@ -21,17 +21,27 @@
 
 	"permissions": [
 		"contextMenus",
-    "storage",
+		"storage",
 		"tabs"
 	],
 
 	"browser_action": {
 		"browser_style": false,
 		"default_icon": {
-			"16": "icons/archive-icon-16.png",
-			"32": "icons/archive-icon-32.png"
+			"16": "icons/archive-icon-dark-16.png",
+			"32": "icons/archive-icon-dark-32.png"
 		},
-		"default_title": "Archive to Wayback Machine"
+		"default_title": "Archive to Wayback Machine",
+		"theme_icons": [{
+			"light": "icons/archive-icon-light-16.png",
+			"dark": "icons/archive-icon-dark-16.png",
+			"size": 16
+		},
+		{
+			"light": "icons/archive-icon-light-32.png",
+			"dark": "icons/archive-icon-dark-32.png",
+			"size": 32
+		}]
 	},
 
 	"background": {
