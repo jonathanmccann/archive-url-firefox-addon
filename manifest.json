@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Archive URL",
-	"version": "1.7",
+	"version": "1.8",
 
 	"author": "Jonathan McCann",
 	"homepage_url": "https://github.com/jonathanmccann/archive-url-firefox-addon",

@@ -40,11 +40,9 @@ function resetArchiveURL() {
 		var archiveDomain;
 
 		if ((name.archiveDomain == undefined)) {
-			console.log("Setting udnefined to today");
 			archiveDomain = "today";
 		}
 		else {
-			console.log("Setting udnefined to " + name.archiveDomain);
 			archiveDomain = name.archiveDomain;
 		}
 
