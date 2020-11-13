@@ -32,7 +32,7 @@ function saveCurrentUrl() {
 
 function archiveUrlArchive(url) {
 	browser.tabs.create({
-		url: "https://archive." + archiveDomain + "/?run=1&url=" + url,
+		url: "https://archive." + archiveDomain + "/?run=1&url=" + encodeURIComponent(url),
 		active: false
 	})
 }

@@ -17,7 +17,7 @@ document.addEventListener("click", function(e) {
 			if (tabs[0]) {
 				if ((e.target.id == "archive") || (e.target.id == "both")) {
 					browser.tabs.create({
-						url: "https://archive." + archiveDomain + "/?run=1&url=" + tabs[0].url,
+						url: "https://archive." + archiveDomain + "/?run=1&url=" + encodeURIComponent(tabs[0].url),
 						active: false
 					})
 				}
