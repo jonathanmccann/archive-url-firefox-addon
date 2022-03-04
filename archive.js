@@ -209,11 +209,10 @@ browser.storage.onChanged.addListener(checkForArchiverChanges);
 
 // Read the preferences from local storage
 browser.storage.local.get("archiverDomain", function(name) {
-	if ((name.archiveDomain == undefined)) {
+	archiveDomain = name.archiveDomain;
+
+	if (archiveDomain == undefined) {
 		archiveDomain = "today";
-	}
-	else {
-		archiveDomain = name.archiveDomain;
 	}
 
 	browser.storage.local.get("archiver", function(name) {

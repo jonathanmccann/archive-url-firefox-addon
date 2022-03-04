@@ -1,6 +1,4 @@
 document.addEventListener("click", function(e) {
-	var archiveDomain;
-
 	if (!e.target.classList.contains("archiver")) {
 		return;
 	}
@@ -9,11 +7,10 @@ document.addEventListener("click", function(e) {
 		browser.tabs.query({active: true, currentWindow: true}).then(tabs => {
 			if (tabs[0]) {
 				if ((e.target.id == "archive") || (e.target.id == "both")) {
-					if ((name.archiveDomain == undefined)) {
+					var archiveDomain = name.archiveDomain;
+
+					if (archiveDomain == undefined) {
 						archiveDomain = "today";
-					}
-					else {
-						archiveDomain = name.archiveDomain;
 					}
 
 					browser.tabs.create({
@@ -37,13 +34,10 @@ document.addEventListener("click", function(e) {
 
 function resetArchiveURL() {
 	browser.storage.local.get("archiveDomain").then(name => {
-		var archiveDomain;
+		var archiveDomain = name.archiveDomain;
 
-		if ((name.archiveDomain == undefined)) {
+		if (archiveDomain == undefined) {
 			archiveDomain = "today";
-		}
-		else {
-			archiveDomain = name.archiveDomain;
 		}
 
 		document.getElementById("archive").innerHTML = "Save to archive." + archiveDomain;
