@@ -5,16 +5,19 @@ var enabledArchivers = [];
 
 var archiveCurrentUrlTitle = "Archive Current URL";
 var archiveCurrentUrlTitleToArchive = "Archive Current URL to archive.";
+var archiveCurrentUrlTitleToGhostArchive = "Archive Current URL to Ghost Archive";
 var archiveCurrentUrlTitleToWayback = "Archive Current URL to Wayback Machine";
 var archiveCurrentUrlTitleToBoth = "Archive Current URL to both";
 
 var archiveImageUrlTitle = "Archive Image URL";
 var archiveImageUrlTitleToArchive = "Archive Image URL to archive.";
+var archiveImageUrlTitleToGhostArchive = "Archive Image URL to Ghost Archive";
 var archiveImageUrlTitleToWayback = "Archive Image URL to Wayback Machine";
 var archiveImageUrlTitleToBoth = "Archive Image URL to bothm";
 
 var archiveLinkUrlTitle = "Archive Link URL";
 var archiveLinkUrlTitleToArchive = "Archive Link URL to archive.";
+var archiveLinkUrlTitleToGhostArchive = "Archive Link URL to Ghost Archive";
 var archiveLinkUrlTitleToWayback = "Archive Link URL to Wayback Machine";
 var archiveLinkUrlTitleToBoth = "Archive Link URL to both";
 
@@ -38,6 +41,13 @@ function archiveUrlArchive(url) {
 	})
 }
 
+function archiveUrlGhostArchive(url) {
+	browser.tabs.create({
+		url: "https://ghostarchive.org/save/" + url,
+		active: false
+	})
+}
+
 function archiveUrlWayback(url) {
 	browser.tabs.create({
 		url: "https://web.archive.org/save/" + url,
@@ -46,8 +56,17 @@ function archiveUrlWayback(url) {
 }
 
 function archiveUrlToBoth(url) {
-	archiveUrlArchive(url);
-	archiveUrlWayback(url);
+	for (enabledArchiver of enabledArchivers) {
+		if (enabledArchiver == "archive") {
+			archiveUrlArchive(url);
+		}
+		else if (enabledArchiver == "ghostArchive") {
+			archiveUrlGhostArchive(url);
+		}
+		else if (enabledArchiver == "wayback") {
+			archiveUrlWayback(url);
+		}
+	}
 }
 
 // Check for changes to 'archiver' and update the local value accordingly as well as the toolbar title
@@ -116,6 +135,26 @@ function addBothArchiveContextMenus() {
 	})
 }
 
+function addGhostArchiveContextMenus() {
+	browser.contextMenus.create({
+		id: "archive-url-ghost-archive",
+		title: archiveCurrentUrlTitleToGhostArchive,
+		contexts: ["page"]
+	})
+
+	browser.contextMenus.create({
+		id: "archive-image-url-ghost-archive",
+		title: archiveImageUrlTitleToGhostArchive,
+		contexts: ["image"]
+	})
+
+	browser.contextMenus.create({
+		id: "archive-link-url-ghost-archive",
+		title: archiveLinkUrlTitleToGhostArchive,
+		contexts: ["link"]
+	})
+}
+
 function addWaybackContextMenus() {
 	browser.contextMenus.create({
 		id: "archive-url-wayback",
@@ -149,6 +188,11 @@ function updateArchiver() {
 
 			addArchiveContextMenus();
 		}
+		else if (enabledArchivers[0] == "ghostArchive") {
+			browser.browserAction.setTitle({title: "Archive to Ghost Archive"});
+
+			addGhostArchiveContextMenus();
+		}
 		else {
 			browser.browserAction.setTitle({title: "Archive to Wayback Machine"});
 
@@ -162,8 +206,20 @@ function updateArchiver() {
 
 		browser.browserAction.setTitle({title: "Archive current URL"});
 
-		addArchiveContextMenus();
-		addWaybackContextMenus();
+		console.log("Iterating " + enabledArchivers);
+
+		for (enabledArchiver of enabledArchivers) {
+			if (enabledArchiver == "archive") {
+				addArchiveContextMenus();
+			}
+			else if (enabledArchiver == "ghostArchive") {
+				addGhostArchiveContextMenus();
+			}
+			else if (enabledArchiver == "wayback") {
+				addWaybackContextMenus();
+			}
+		}
+
 		addBothArchiveContextMenus();
 	}
 }
@@ -178,6 +234,15 @@ browser.contextMenus.onClicked.addListener(function(info, tab) {
 			break;
 		case "archive-link-url-archive":
 			archiveUrlArchive(info.linkUrl);
+			break;
+		case "archive-url-ghost-archive":
+			archiveUrlGhostArchive(tab.url);
+			break;
+		case "archive-image-url-ghost-archive":
+			archiveUrlGhostArchive(info.srcUrl);
+			break;
+		case "archive-link-url-ghost-archive":
+			archiveUrlGhostArchive(info.linkUrl);
 			break;
 		case "archive-url-wayback":
 			archiveUrlWayback(tab.url);
