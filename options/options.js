@@ -57,7 +57,7 @@ function restoreOptions() {
 	});
 
 	browser.storage.local.get("enabledArchivers", function(enabledArchivers) {
-		if ((name.enabledArchivers == undefined) || (name.enabledArchivers == "")) {
+		if ((enabledArchivers.enabledArchivers == undefined) || (enabledArchivers.enabledArchivers == "")) {
 			setArchiver(["wayback"]);
 		}
 		else {
