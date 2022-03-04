@@ -6,17 +6,17 @@ var enabledArchivers = [];
 var archiveCurrentUrlTitleToArchive = "Archive Current URL to archive.";
 var archiveCurrentUrlTitleToGhostArchive = "Archive Current URL to Ghost Archive";
 var archiveCurrentUrlTitleToWayback = "Archive Current URL to Wayback Machine";
-var archiveCurrentUrlTitleToBoth = "Archive Current URL to both";
+var archiveCurrentUrlTitleToMultiple = "Archive Current URL to ";
 
 var archiveImageUrlTitleToArchive = "Archive Image URL to archive.";
 var archiveImageUrlTitleToGhostArchive = "Archive Image URL to Ghost Archive";
 var archiveImageUrlTitleToWayback = "Archive Image URL to Wayback Machine";
-var archiveImageUrlTitleToBoth = "Archive Image URL to both";
+var archiveImageUrlTitleToMultiple = "Archive Image URL to ";
 
 var archiveLinkUrlTitleToArchive = "Archive Link URL to archive.";
 var archiveLinkUrlTitleToGhostArchive = "Archive Link URL to Ghost Archive";
 var archiveLinkUrlTitleToWayback = "Archive Link URL to Wayback Machine";
-var archiveLinkUrlTitleToBoth = "Archive Link URL to both";
+var archiveLinkUrlTitleToMultiple = "Archive Link URL to ";
 
 function saveCurrentUrl() {
 	browser.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -52,7 +52,7 @@ function archiveUrlWayback(url) {
 	})
 }
 
-function archiveUrlToBoth(url) {
+function archiveUrlToMultiple(url) {
 	for (enabledArchiver of enabledArchivers) {
 		if (enabledArchiver == "archive") {
 			archiveUrlArchive(url);
@@ -115,19 +115,19 @@ function addArchiveContextMenus() {
 function addBothArchiveContextMenus() {
 	browser.contextMenus.create({
 		id: "archive-url-both",
-		title: archiveCurrentUrlTitleToBoth,
+		title: archiveCurrentUrlTitleToMultiple + (enabledArchivers.length == 2 ? "both" : "all"),
 		contexts: ["page"]
 	})
 
 	browser.contextMenus.create({
 		id: "archive-image-url-both",
-		title: archiveImageUrlTitleToBoth,
+		title: archiveImageUrlTitleToMultiple + (enabledArchivers.length == 2 ? "both" : "all"),
 		contexts: ["image"]
 	})
 
 	browser.contextMenus.create({
 		id: "archive-link-url-both",
-		title: archiveLinkUrlTitleToBoth,
+		title: archiveLinkUrlTitleToMultiple + (enabledArchivers.length == 2 ? "both" : "all"),
 		contexts: ["link"]
 	})
 }
@@ -251,13 +251,13 @@ browser.contextMenus.onClicked.addListener(function(info, tab) {
 			archiveUrlWayback(info.linkUrl);
 			break;
 		case "archive-url-both":
-			archiveUrlToBoth(tab.url);
+			archiveUrlToMultiple(tab.url);
 			break;
 		case "archive-image-url-both":
-			archiveUrlToBoth(info.srcUrl);
+			archiveUrlToMultiple(info.srcUrl);
 			break;
 		case "archive-link-url-both":
-			archiveUrlToBoth(info.linkUrl);
+			archiveUrlToMultiple(info.linkUrl);
 			break;
 	}
 });
