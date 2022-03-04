@@ -42,6 +42,19 @@ function resetArchiveURL() {
 
 		document.getElementById("archive").innerHTML = "Save to archive." + archiveDomain;
 	});
+
+	browser.storage.local.get("enabledArchivers", function(enabledArchivers) {
+		if ((enabledArchivers.enabledArchivers == undefined) || (enabledArchivers.enabledArchivers == "")) {
+			document.getElementById("wayback").style.display = "block";
+		}
+		else {
+			document.getElementById("both").style.display = "block";
+
+			for (var enabledArchiver of JSON.parse(enabledArchivers.enabledArchivers)) {
+				document.getElementById(enabledArchiver).style.display = "block";
+			}
+		}
+	});
 }
 
 document.addEventListener("DOMContentLoaded", resetArchiveURL);
