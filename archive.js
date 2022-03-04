@@ -24,6 +24,9 @@ function saveCurrentUrl() {
 			if (enabledArchivers[0] == "archive") {
 				archiveUrlArchive(tabs[0].url);
 			}
+			else if (enabledArchivers[0] == "ghostArchive") {
+				archiveUrlGhostArchive(tabs[0].url);
+			}
 			else {
 				archiveUrlWayback(tabs[0].url);
 			}
@@ -202,8 +205,6 @@ function updateArchiver() {
 		browser.browserAction.onClicked.removeListener(saveCurrentUrl);
 
 		browser.browserAction.setTitle({title: "Archive current URL"});
-
-		console.log("Iterating " + enabledArchivers);
 
 		for (enabledArchiver of enabledArchivers) {
 			if (enabledArchiver == "archive") {
