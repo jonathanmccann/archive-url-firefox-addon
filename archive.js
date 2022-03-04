@@ -212,7 +212,12 @@ browser.storage.local.get("archiverDomain", function(name) {
 	}
 
 	browser.storage.local.get("enabledArchivers", function(name) {
-		enabledArchivers = JSON.parse(name);
+		if ((name.enabledArchivers == undefined) || (name.enabledArchivers == "")) {
+			enabledArchivers.push("wayback");
+		}
+		else {
+			enabledArchivers = JSON.parse(name.enabledArchivers);
+		}
 
 		updateArchiver();
 	});
