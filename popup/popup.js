@@ -6,16 +6,16 @@ document.addEventListener("click", function(e) {
 	}
 
 	browser.storage.local.get("archiveDomain").then(name => {
-		if ((name.archiveDomain == undefined)) {
-			archiveDomain = "today";
-		}
-		else {
-			archiveDomain = name.archiveDomain;
-		}
-
 		browser.tabs.query({active: true, currentWindow: true}).then(tabs => {
 			if (tabs[0]) {
 				if ((e.target.id == "archive") || (e.target.id == "both")) {
+					if ((name.archiveDomain == undefined)) {
+						archiveDomain = "today";
+					}
+					else {
+						archiveDomain = name.archiveDomain;
+					}
+
 					browser.tabs.create({
 						url: "https://archive." + archiveDomain + "/?run=1&url=" + encodeURIComponent(tabs[0].url),
 						active: false
