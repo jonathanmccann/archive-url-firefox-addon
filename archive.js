@@ -3,19 +3,16 @@ var archiver;
 
 var enabledArchivers = [];
 
-var archiveCurrentUrlTitle = "Archive Current URL";
 var archiveCurrentUrlTitleToArchive = "Archive Current URL to archive.";
 var archiveCurrentUrlTitleToGhostArchive = "Archive Current URL to Ghost Archive";
 var archiveCurrentUrlTitleToWayback = "Archive Current URL to Wayback Machine";
 var archiveCurrentUrlTitleToBoth = "Archive Current URL to both";
 
-var archiveImageUrlTitle = "Archive Image URL";
 var archiveImageUrlTitleToArchive = "Archive Image URL to archive.";
 var archiveImageUrlTitleToGhostArchive = "Archive Image URL to Ghost Archive";
 var archiveImageUrlTitleToWayback = "Archive Image URL to Wayback Machine";
-var archiveImageUrlTitleToBoth = "Archive Image URL to bothm";
+var archiveImageUrlTitleToBoth = "Archive Image URL to both";
 
-var archiveLinkUrlTitle = "Archive Link URL";
 var archiveLinkUrlTitleToArchive = "Archive Link URL to archive.";
 var archiveLinkUrlTitleToGhostArchive = "Archive Link URL to Ghost Archive";
 var archiveLinkUrlTitleToWayback = "Archive Link URL to Wayback Machine";
@@ -98,19 +95,19 @@ function checkForArchiverChanges(changes, area) {
 function addArchiveContextMenus() {
 	browser.contextMenus.create({
 		id: "archive-url-archive",
-		title: archiveCurrentUrlTitle,
+		title: archiveCurrentUrlTitleToArchive + archiveDomain,
 		contexts: ["page"]
 	})
 
 	browser.contextMenus.create({
 		id: "archive-image-url-archive",
-		title: archiveImageUrlTitle,
+		title: archiveImageUrlTitleToArchive + archiveDomain,
 		contexts: ["image"]
 	})
 
 	browser.contextMenus.create({
 		id: "archive-link-url-archive",
-		title: archiveLinkUrlTitle,
+		title: archiveLinkUrlTitleToArchive + archiveDomain,
 		contexts: ["link"]
 	})
 }
@@ -158,19 +155,19 @@ function addGhostArchiveContextMenus() {
 function addWaybackContextMenus() {
 	browser.contextMenus.create({
 		id: "archive-url-wayback",
-		title: archiveCurrentUrlTitle,
+		title: archiveCurrentUrlTitleToWayback,
 		contexts: ["page"]
 	})
 
 	browser.contextMenus.create({
 		id: "archive-image-url-wayback",
-		title: archiveImageUrlTitle,
+		title: archiveImageUrlTitleToWayback,
 		contexts: ["image"]
 	})
 
 	browser.contextMenus.create({
 		id: "archive-link-url-wayback",
-		title: archiveLinkUrlTitle,
+		title: archiveLinkUrlTitleToWayback,
 		contexts: ["link"]
 	})
 }
