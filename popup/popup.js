@@ -6,7 +6,7 @@ document.addEventListener("click", function(e) {
 	browser.storage.local.get("archiveDomain").then(name => {
 		browser.tabs.query({active: true, currentWindow: true}).then(tabs => {
 			if (tabs[0]) {
-				if ((e.target.id == "archive") || (e.target.id == "both")) {
+				if ((e.target.id == "archive") || (e.target.id == "multiple")) {
 					var archiveDomain = name.archiveDomain;
 
 					if (archiveDomain == undefined) {
@@ -19,7 +19,14 @@ document.addEventListener("click", function(e) {
 					})
 				}
 
-				if ((e.target.id == "wayback") || (e.target.id == "both")) {
+				if ((e.target.id == "ghostArchive") || (e.target.id == "multiple")) {
+					browser.tabs.create({
+						url: "https://ghostarchive.org/save/" + tabs[0].url,
+						active: false
+					})
+				}
+
+				if ((e.target.id == "wayback") || (e.target.id == "multiple")) {
 					browser.tabs.create({
 						url: "https://web.archive.org/save/" + tabs[0].url,
 						active: false
@@ -33,6 +40,7 @@ document.addEventListener("click", function(e) {
 });
 
 function resetArchiveURL() {
+	console.log("Hit reset")
 	browser.storage.local.get("archiveDomain").then(name => {
 		var archiveDomain = name.archiveDomain;
 
@@ -40,7 +48,7 @@ function resetArchiveURL() {
 			archiveDomain = "today";
 		}
 
-		document.getElementById("archive").innerHTML = "Save to archive." + archiveDomain;
+		document.getElementById("archive").innerHTML = "Archive to archive." + archiveDomain;
 	});
 
 	browser.storage.local.get("enabledArchivers", function(enabledArchivers) {
@@ -48,10 +56,22 @@ function resetArchiveURL() {
 			document.getElementById("wayback").style.display = "block";
 		}
 		else {
-			document.getElementById("both").style.display = "block";
+			var count = 0;
 
 			for (var enabledArchiver of JSON.parse(enabledArchivers.enabledArchivers)) {
+				console.log("Displaying " + enabledArchiver);
 				document.getElementById(enabledArchiver).style.display = "block";
+
+				count++;
+			}
+
+			document.getElementById("multiple").style.display = "block";
+
+			if (count == 2) {
+				document.getElementById("multiple").innerHTML = "Archive to both";
+			}
+			else {
+				document.getElementById("multiple").innerHTML = "Archive to all";
 			}
 		}
 	});
