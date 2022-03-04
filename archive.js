@@ -80,7 +80,69 @@ function checkForArchiverChanges(changes, area) {
 	}
 }
 
+function addArchiveContextMenus() {
+	browser.contextMenus.create({
+		id: "archive-url-archive",
+		title: archiveCurrentUrlTitle,
+		contexts: ["page"]
+	})
+
+	browser.contextMenus.create({
+		id: "archive-image-url-archive",
+		title: archiveImageUrlTitle,
+		contexts: ["image"]
+	})
+
+	browser.contextMenus.create({
+		id: "archive-link-url-archive",
+		title: archiveLinkUrlTitle,
+		contexts: ["link"]
+	})
+}
+
+function addBothArchiveContextMenus() {
+	browser.contextMenus.create({
+		id: "archive-url-both",
+		title: archiveCurrentUrlTitleToBoth,
+		contexts: ["page"]
+	})
+
+	browser.contextMenus.create({
+		id: "archive-image-url-both",
+		title: archiveImageUrlTitleToBoth,
+		contexts: ["image"]
+	})
+
+	browser.contextMenus.create({
+		id: "archive-link-url-both",
+		title: archiveLinkUrlTitleToBoth,
+		contexts: ["link"]
+	})
+}
+
+function addWaybackContextMenus() {
+	browser.contextMenus.create({
+		id: "archive-url-wayback",
+		title: archiveCurrentUrlTitle,
+		contexts: ["page"]
+	})
+
+	browser.contextMenus.create({
+		id: "archive-image-url-wayback",
+		title: archiveImageUrlTitle,
+		contexts: ["image"]
+	})
+
+	browser.contextMenus.create({
+		id: "archive-link-url-wayback",
+		title: archiveLinkUrlTitle,
+		contexts: ["link"]
+	})
+}
+
 function updateArchiver() {
+	browser.contextMenus.removeAll();
+
 	if ((oneClickSave == "false") || (oneClickSave == false)) {
 		browser.browserAction.setPopup({popup: "popup/popup.html"});
 
@@ -88,61 +150,9 @@ function updateArchiver() {
 
 		browser.browserAction.setTitle({title: "Archive current URL"});
 
-		browser.contextMenus.removeAll();
-
-		browser.contextMenus.create({
-			id: "archive-url-archive",
-			title: archiveCurrentUrlTitleToArchive + archiveDomain,
-			contexts: ["page"]
-		})
-
-		browser.contextMenus.create({
-			id: "archive-url-wayback",
-			title: archiveCurrentUrlTitleToWayback,
-			contexts: ["page"]
-		})
-
-		browser.contextMenus.create({
-			id: "archive-url-both",
-			title: archiveCurrentUrlTitleToBoth,
-			contexts: ["page"]
-		})
-
-		browser.contextMenus.create({
-			id: "archive-image-url-archive",
-			title: archiveImageUrlTitleToArchive + archiveDomain,
-			contexts: ["image"]
-		})
-
-		browser.contextMenus.create({
-			id: "archive-image-url-wayback",
-			title: archiveImageUrlTitleToWayback,
-			contexts: ["image"]
-		})
-
-		browser.contextMenus.create({
-			id: "archive-image-url-both",
-			title: archiveImageUrlTitleToBoth,
-			contexts: ["image"]
-		})
-
-		browser.contextMenus.create({
-			id: "archive-link-url-archive",
-			title: archiveLinkUrlTitleToArchive + archiveDomain,
-			contexts: ["link"]
-		})
-
-		browser.contextMenus.create({
-			id: "archive-link-url-wayback",
-			title: archiveLinkUrlTitleToWayback,
-			contexts: ["link"]
-		})
-
-		browser.contextMenus.create({
-			id: "archive-link-url-both",
-			title: archiveLinkUrlTitleToBoth,
-			contexts: ["link"]
-		})
+		addArchiveContextMenus();
+		addWaybackContextMenus();
+		addBothArchiveContextMenus();
 	}
 	else {
 		browser.browserAction.setPopup({popup: ""});
@@ -152,48 +162,12 @@ function updateArchiver() {
 		if (archiver == "archive") {
 			browser.browserAction.setTitle({title: "Archive to archive." + archiveDomain});
 
-			browser.contextMenus.removeAll();
-
-			browser.contextMenus.create({
-				id: "archive-url-archive",
-				title: archiveCurrentUrlTitle,
-				contexts: ["page"]
-			})
-
-			browser.contextMenus.create({
-				id: "archive-image-url-archive",
-				title: archiveImageUrlTitle,
-				contexts: ["image"]
-			})
-
-			browser.contextMenus.create({
-				id: "archive-link-url-archive",
-				title: archiveLinkUrlTitle,
-				contexts: ["link"]
-			})
+			addArchiveContextMenus();
 		}
 		else {
 			browser.browserAction.setTitle({title: "Archive to Wayback Machine"});
 
-			browser.contextMenus.removeAll();
-
-			browser.contextMenus.create({
-				id: "archive-url-wayback",
-				title: archiveCurrentUrlTitle,
-				contexts: ["page"]
-			})
-
-			browser.contextMenus.create({
-				id: "archive-image-url-wayback",
-				title: archiveImageUrlTitle,
-				contexts: ["image"]
-			})
-
-			browser.contextMenus.create({
-				id: "archive-link-url-wayback",
-				title: archiveLinkUrlTitle,
-				contexts: ["link"]
-			})
+			addWaybackContextMenus();
 		}
 	}
 }
