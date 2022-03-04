@@ -1,6 +1,7 @@
 var archiveDomain;
 var archiver;
-var oneClickSave;
+
+var enabledArchivers = [];
 
 var archiveCurrentUrlTitle = "Archive Current URL";
 var archiveCurrentUrlTitleToArchive = "Archive Current URL to archive.";
@@ -20,7 +21,7 @@ var archiveLinkUrlTitleToBoth = "Archive Link URL to both";
 function saveCurrentUrl() {
 	browser.tabs.query({active: true, currentWindow: true}, function(tabs) {
 		if (tabs[0]) {
-			if (archiver == "archive") {
+			if (enabledArchivers[0] == "archive") {
 				archiveUrlArchive(tabs[0].url);
 			}
 			else {
@@ -62,13 +63,8 @@ function checkForArchiverChanges(changes, area) {
 
 				preferenceChange = true;
 			}
-			else if (item == "archiver") {
-				archiver = changes[item].newValue;
-
-				preferenceChange = true;
-			}
-			else if (item == "oneClickSave") {
-				oneClickSave = changes[item].newValue;
+			else if (item == "enabledArchivers") {
+				enabledArchivers = JSON.parse(changes[item].newValue);
 
 				preferenceChange = true;
 			}
@@ -143,23 +139,12 @@ function addWaybackContextMenus() {
 function updateArchiver() {
 	browser.contextMenus.removeAll();
 
-	if ((oneClickSave == "false") || (oneClickSave == false)) {
-		browser.browserAction.setPopup({popup: "popup/popup.html"});
-
-		browser.browserAction.onClicked.removeListener(saveCurrentUrl);
-
-		browser.browserAction.setTitle({title: "Archive current URL"});
-
-		addArchiveContextMenus();
-		addWaybackContextMenus();
-		addBothArchiveContextMenus();
-	}
-	else {
+	if (enabledArchivers.length == 1) {
 		browser.browserAction.setPopup({popup: ""});
 
 		browser.browserAction.onClicked.addListener(saveCurrentUrl);
 
-		if (archiver == "archive") {
+		if (enabledArchivers[0] == "archive") {
 			browser.browserAction.setTitle({title: "Archive to archive." + archiveDomain});
 
 			addArchiveContextMenus();
@@ -169,6 +154,17 @@ function updateArchiver() {
 
 			addWaybackContextMenus();
 		}
+	}
+	else {
+		browser.browserAction.setPopup({popup: "popup/popup.html"});
+
+		browser.browserAction.onClicked.removeListener(saveCurrentUrl);
+
+		browser.browserAction.setTitle({title: "Archive current URL"});
+
+		addArchiveContextMenus();
+		addWaybackContextMenus();
+		addBothArchiveContextMenus();
 	}
 }
 
@@ -215,23 +211,9 @@ browser.storage.local.get("archiverDomain", function(name) {
 		archiveDomain = "today";
 	}
 
-	browser.storage.local.get("archiver", function(name) {
-		if (name.archiver == "undefined") {
-			archiver = wayback;
-		}
-		else {
-			archiver = name.archiver;
-		}
+	browser.storage.local.get("enabledArchivers", function(name) {
+		enabledArchivers = JSON.parse(name);
 
-		browser.storage.local.get("oneClickSave", function(name) {
-			if ((name.oneClickSave == undefined) || (name.oneClickSave == false)) {
-				oneClickSave = "false";
-			}
-			else {
-				oneClickSave = "true";
-			}
-
-			updateArchiver();
-		});
+		updateArchiver();
 	});
 });

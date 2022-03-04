@@ -1,5 +1,3 @@
-var oneClickSave = document.getElementById("oneClickSave");
-
 function saveOptions(e) {
 	var archiver;
 
@@ -11,85 +9,57 @@ function saveOptions(e) {
 		document.getElementById("archiveDomain").value = "today";
 	}
 
-	document.getElementById("archiverLabel").innerHTML = "archive." + archiveDomain;
+	document.getElementById("archiveLabel").innerHTML = "archive." + archiveDomain;
 
-	var length = document.options.archiver.length;
+	var enabledArchiverCheckboxes = document.querySelectorAll('input[type=checkbox]:checked');
 
-	for (var i = 0; i < length; i++) {
-		if (document.options.archiver[i].checked) {
-			archiver = document.options.archiver[i].value;
+	var enabledArchivers = [];
 
-			break;
+	if (enabledArchiverCheckboxes.length == 0) {
+		enabledArchivers.push("wayback");
+	}
+	else {
+		for (i = 0; i < enabledArchiverCheckboxes.length; i++) {
+			enabledArchivers.push(enabledArchiverCheckboxes[i].id)
 		}
 	}
 
-	var oneClickSave = document.options.oneClickSave.checked;
+	setArchiver(enabledArchivers);
 
 	browser.storage.local.set({
 		archiveDomain: archiveDomain,
-		archiver: archiver,
-		oneClickSave: oneClickSave
+		enabledArchivers: JSON.stringify(enabledArchivers)
 	});
 
 	e.preventDefault();
 }
 
 function setArchiveDomain(archiveDomain) {
-	if ((archiveDomain.archiveDomain == undefined) || (archiveDomain.archiveDomain == "")) {
+	if ((archiveDomain == undefined) || (archiveDomain == "")) {
 		document.getElementById("archiveDomain").value = "today";
-		document.getElementById("archiverLabel").innerHTML = "archive.today";
+		document.getElementById("archiveLabel").innerHTML = "archive.today";
 	}
 	else {
-		document.getElementById("archiveDomain").value = archiveDomain.archiveDomain;
-		document.getElementById("archiverLabel").innerHTML = "archive." + archiveDomain.archiveDomain;
+		document.getElementById("archiveDomain").value = archiveDomain;
+		document.getElementById("archiveLabel").innerHTML = "archive." + archiveDomain;
 	}
 }
 
-function setArchiver(archiver) {
-	if ((archiver.archiver == "") || (archiver.archiver == "wayback")) {
-		document.getElementById("wayback").checked = true;
-	}
-	else {
-		document.getElementById("archive").checked = true;
-	}
-}
-
-function setOneClickSave(oneClickSave) {
-	if ((oneClickSave == undefined) || (oneClickSave == false)) {
-		document.getElementById("oneClickSave").checked = false;
-	}
-	else {
-		document.getElementById("oneClickSave").checked = true;
-	}
-}
-
-function toggleArchiverOptions() {
-	var length = document.options.archiver.length
-
-	for (var i = 0; i < length; i++) {
-		document.options.archiver[i].disabled = !oneClickSave.checked;
+function setArchiver(enabledArchivers) {
+	for (i = 0; i < enabledArchivers.length; i++) {
+		document.getElementById(enabledArchivers[i]).checked = true;
 	}
 }
 
 function restoreOptions() {
 	browser.storage.local.get("archiveDomain", function(archiveDomain) {
-		setArchiveDomain(archiveDomain);
+		setArchiveDomain(archiveDomain.archiveDomain);
 	});
 
-	browser.storage.local.get("archiver", function(archiver) {
-		setArchiver(archiver);
-
-		browser.storage.local.get("oneClickSave", function(name) {
-			setOneClickSave(name.oneClickSave);
-
-			toggleArchiverOptions();
-		});
+	browser.storage.local.get("enabledArchivers", function(enabledArchivers) {
+		setArchiver(JSON.parse(enabledArchivers.enabledArchivers));
 	});
 }
 
 document.addEventListener("DOMContentLoaded", restoreOptions);
 document.querySelector("form").addEventListener("submit", saveOptions);
-
-oneClickSave.addEventListener('change', function (event) {
-	toggleArchiverOptions();
-});
